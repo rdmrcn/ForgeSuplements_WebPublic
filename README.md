@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FORGE — premium sports nutrition storefront (demo)
 
-## Getting Started
+FORGE is a **fictional** sports nutrition brand built as a complete, locally runnable e-commerce portfolio project. The name is provisional and has **not** been trademark-cleared. All brand text, packaging art and imagery are original.
 
-First, run the development server:
+> **Demo store.** No payment is taken, no card data is collected, nothing ships. Checkout creates a local demo order marked `not_charged_demo` / `not_fulfilled`.
+
+## Stack
+
+- Next.js 16 (App Router, Turbopack), React 19, strict TypeScript
+- Tailwind CSS 4, Lucide icons, `next/font` (Big Shoulders, Instrument Serif, Geist)
+- Zustand (persisted cart, favourites, recently viewed), react-hook-form + zod
+- Vitest (unit) and Playwright (end-to-end)
+
+## Run locally
+
+Prerequisites: Node.js 20+ and npm. Playwright tests use a system Chrome (`PW_CHANNEL` overrides the channel).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # optional
+npm run dev -- -p 4317       # http://localhost:4317
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` / `npm start` | Production build and server |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Vitest unit tests |
+| `npm run test:e2e` | Playwright; builds and serves on port 4318 (desktop and mobile projects) |
+| `npm run check` | lint + typecheck + unit tests |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+See `.env.example`. Placeholders only; there are no secrets.
 
-To learn more about Next.js, take a look at the following resources:
+- `NEXT_PUBLIC_SITE_URL` — canonical origin for metadata, sitemap and JSON-LD.
+- `PAYMENT_PROVIDER` — only `demo` is implemented; any other value throws.
+- `ORDER_STORE_PATH` — demo order file (default `.data/orders.json`, git-ignored; memory fallback if unwritable).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 13 products with flavours/sizes, per-variant stock, ingredients, illustrative nutrition tables, directions, warnings and related products. No health claims, certifications or testimonials.
+- Shop with filters (category, flavour, size, availability, price), sort, URL-synced state, search with scoring, favourites, recently viewed.
+- Cart drawer and page, stock-aware quantities (max 10 per line), discount codes (`FORGE10`, `WELCOME5`, `FREESHIP`), free-shipping meter.
+- Three-step checkout with country-specific address forms for TR, US, CA, DE, AT and GB (Türkiye province/district with partial-data fallback).
+- Illustrative, configurable shipping (`src/config/shipping.ts`).
+- Original SVG packaging renders generated from catalog data, generated campaign imagery, reduced-motion support, skip link, native `<dialog>` drawers.
+- SEO: metadata, sitemap, robots, Product JSON-LD (only fields that exist).
+- Policy pages, contact form (demo, nothing sent), 404/error/loading states, demo order confirmation page.
 
-## Deploy on Vercel
+## How demo checkout works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. The client sends only `variantId` + `quantity`, the address, shipping method and discount code, plus the totals it displayed.
+2. `src/server/orders/service.ts` re-prices everything with the same pure `priceCart()` used by the UI. Totals the client sent are never trusted.
+3. A mismatch returns `409 price_mismatch`; stock/discount changes return `409 cart_changed`; malformed input `400`.
+4. The `PaymentProvider` interface (`src/server/payments`) is the seam for a real provider; the demo provider charges `0`.
+5. Orders are stored through an `OrderRepository` (JSON file). A `CarrierAdapter` interface exists as a hook for carriers.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Before real commerce
+
+This repo is not ready to take money. Still needed: a real payment provider integrated server-side (hosted fields/redirect; never handle raw card data), a database instead of the JSON file, verified tax/VAT and carrier rates, inventory reservation, transactional email, legal review of policies, nutrition/label compliance review for the real products, trademark clearance for the name, rate limiting and bot protection.
+
+## Verified results
+
+Commands actually run on the final code:
+
+- `npx eslint .` — no errors
+- `npx tsc --noEmit` — passes
+- `npm run build` — succeeds (37 static pages)
+- `npx vitest run` — 36/36 pass
+- `npx playwright test` — 32/32 pass against the production build (desktop + mobile)
+
+A fresh dev-server load of home, product, cart drawer and checkout showed no console errors or warnings.
+
+## Known limitations / unfinished
+
+- Türkiye district data covers only İstanbul, Ankara, İzmir, Bursa and Antalya; other provinces use a free-text district.
+- No database (Prisma/PostgreSQL not implemented).
+- Nutrition values, prices, stock, shipping rates and policy text are illustrative placeholders.
+- `/order/<unknown-id>` renders the not-found UI but responds with HTTP 200 (streamed).
+- Cart drawer and cart page content both live in the DOM.
+- Big Shoulders font fallback-metrics warning appears at build time.
+- Accessibility was built in (labels, focus handling, contrast tokens) but not audited with an external tool.
+- No deployment was made.
