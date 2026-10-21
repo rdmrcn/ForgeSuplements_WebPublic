@@ -62,6 +62,18 @@ See `.env.example`. Placeholders only; there are no secrets.
 4. The `PaymentProvider` interface (`src/server/payments`) is the seam for a real provider; the demo provider charges `0`.
 5. Orders are stored through an `OrderRepository` (JSON file). A `CarrierAdapter` interface exists as a hook for carriers.
 
+## Ownership
+
+Copyright (c) 2026 Reha Demircan, all rights reserved (see `LICENSE`). Third-party dependencies and fonts keep their own licences. The FORGE name is a placeholder and has not been trademark-cleared; check it before using it publicly.
+
+## Running it 24/7
+
+This repo is a standard Next.js app, so it can be hosted on any Node host or on Vercel. Nothing has been deployed from here.
+
+1. Set `NEXT_PUBLIC_SITE_URL` to the public address.
+2. `npm ci && npm run build && npm start` on a Node 20+ host, or import the repo into Vercel.
+3. Demo orders are written to a local JSON file, which does not persist on serverless hosts. That is fine for a demo; real orders need a database.
+
 ## Before real commerce
 
 This repo is not ready to take money. Still needed: a real payment provider integrated server-side (hosted fields/redirect; never handle raw card data), a database instead of the JSON file, verified tax/VAT and carrier rates, inventory reservation, transactional email, legal review of policies, nutrition/label compliance review for the real products, trademark clearance for the name, rate limiting and bot protection.

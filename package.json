@@ -2,6 +2,8 @@
   "name": "forge-storefront",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Reha Demircan",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
