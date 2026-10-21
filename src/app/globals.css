@@ -1,26 +1,331 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--brand-ink);
+  --color-charcoal: var(--brand-charcoal);
+  --color-graphite: var(--brand-graphite);
+  --color-bone: var(--brand-bone);
+  --color-sand: var(--brand-sand);
+  --color-stone: var(--brand-stone);
+  --color-ember: var(--brand-accent);
+  --color-line: color-mix(in srgb, var(--brand-ink) 14%, transparent);
+  --color-line-strong: color-mix(in srgb, var(--brand-ink) 35%, transparent);
+  --color-danger: #b3261e;
+  --color-ok: #2f7d4f;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-shoulders), "Arial Narrow", Impact, sans-serif;
+  --font-serif: var(--font-instrument), Georgia, serif;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  --breakpoint-xs: 30rem;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --header-h: 4.25rem;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 32px -12px rgb(0 0 0 / 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-ember);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 3px;
+}
+.on-dark :focus-visible,
+[data-theme="dark"] :focus-visible {
+  outline-color: var(--color-ember);
+}
+
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 3.2vw, 3rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.005em;
+  }
+
+  .serif-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: -0.01em;
+  }
+
+  .prose-forge {
+    max-width: 44rem;
+  }
+  .prose-forge h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.75rem;
+    line-height: 1;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-forge p,
+  .prose-forge li {
+    color: color-mix(in srgb, var(--color-ink) 82%, transparent);
+  }
+  .prose-forge p + p {
+    margin-top: 0.9rem;
+  }
+  .prose-forge ul {
+    list-style: square;
+    padding-left: 1.25rem;
+    margin-top: 0.75rem;
+  }
+  .prose-forge li + li {
+    margin-top: 0.4rem;
+  }
+  .prose-forge a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out-expo);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-ink) 6%, transparent) 25%,
+      color-mix(in srgb, var(--color-ink) 12%, transparent) 37%,
+      color-mix(in srgb, var(--color-ink) 6%, transparent) 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 1.6s ease infinite;
+  }
+
+  details.accordion > summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  details.accordion > summary::-webkit-details-marker {
+    display: none;
+  }
+  details.accordion .accordion-icon {
+    transition: transform 0.3s var(--ease-out-expo);
+  }
+  details.accordion[open] .accordion-icon {
+    transform: rotate(45deg);
+  }
+  details.accordion::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size 0.35s var(--ease-out-expo),
+      content-visibility 0.35s allow-discrete;
+  }
+  details.accordion[open]::details-content {
+    block-size: auto;
+  }
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+  }
+}
+
+/* Dialog-based drawers: native focus trapping, Escape handling and inert backdrop. */
+dialog.drawer {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  overflow: hidden;
+}
+dialog.drawer::backdrop {
+  background: rgb(8 8 7 / 0.55);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+dialog.drawer[data-state="open"]::backdrop {
+  opacity: 1;
+}
+dialog.drawer .drawer-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+dialog.drawer .drawer-panel[data-side="right"] {
+  right: 0;
+  transform: translateX(100%);
+}
+dialog.drawer .drawer-panel[data-side="left"] {
+  left: 0;
+  transform: translateX(-100%);
+}
+dialog.drawer .drawer-panel[data-side="top"] {
+  left: 0;
+  right: 0;
+  bottom: auto;
+  transform: translateY(-100%);
+}
+dialog.drawer[data-state="open"] .drawer-panel {
+  transform: none;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-pack {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+[data-reveal] {
+  animation: rise 0.9s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 80ms);
+}
+
+.scroll-reveal {
+  animation: rise 1s var(--ease-out-expo) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
+}
+@supports not (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    animation-timeline: auto !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+input.check:checked {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5 10.5l3.2 3.2L15 6.5' fill='none' stroke='%23f4f0e8' stroke-width='2'/></svg>");
+  background-size: 100%;
 }
