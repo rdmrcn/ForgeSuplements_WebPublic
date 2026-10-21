@@ -85,6 +85,7 @@ export const products: Product[] = [
     title: "Standard Whey Protein",
     shortTitle: "Whey Protein",
     categoryId: "protein",
+    goals: ["muscle-gain", "mass-gain"],
     tagline: "Everyday whey protein concentrate in four flavours.",
     description: [
       "Standard Whey is the workhorse of the range: a whey protein concentrate powder that mixes quickly in a shaker, tastes like the flavour on the label and fits into breakfast, post-training or a late snack.",
@@ -143,6 +144,7 @@ export const products: Product[] = [
     title: "Whey Protein Isolate",
     shortTitle: "Whey Isolate",
     categoryId: "protein",
+    goals: ["muscle-gain", "fat-burn"],
     tagline: "A cleaner, higher-protein whey in a bone-white tub.",
     description: [
       "Whey Isolate is built on whey protein isolate rather than concentrate. In this demo formulation that means more protein and less carbohydrate and fat per scoop than Standard Whey, with a lighter texture in the shaker.",
@@ -205,6 +207,7 @@ export const products: Product[] = [
     title: "Creatine Monohydrate",
     shortTitle: "Creatine",
     categoryId: "creatine",
+    goals: ["muscle-gain", "performance"],
     tagline: "One ingredient. Unflavoured. Two sizes.",
     description: [
       "Creatine Monohydrate is exactly what it says on the tub: a single-ingredient creatine powder with no flavouring, sweeteners or fillers in this demo formulation.",
@@ -247,11 +250,65 @@ export const products: Product[] = [
     bestSellerRank: 2,
   },
   {
+    id: "creatine-blueberry",
+    slug: "creatine-blueberry",
+    title: "Creatine Monohydrate Blueberry",
+    shortTitle: "Creatine Blueberry",
+    categoryId: "creatine",
+    goals: ["muscle-gain", "performance"],
+    tagline: "The same creatine, now in blueberry. 300 g.",
+    description: [
+      "Creatine Monohydrate Blueberry is our new flavoured creatine: the same 5 g of creatine monohydrate per serving as the unflavoured tub, with a light blueberry flavour so it tastes like something in plain water.",
+      "It comes in a single 300 g tub and is today's daily deal in this demo store.",
+    ],
+    highlights: [
+      "New: blueberry flavour",
+      "5 g creatine monohydrate per serving",
+      "300 g tub, 50 servings",
+      "Dissolves in water, juice or a shake",
+    ],
+    variants: buildVariants(
+      "creatine-blueberry",
+      "CRB",
+      [{ size: "300 g", weightGrams: 300, priceCents: 1590, compareAtCents: 1990, servings: 50 }],
+      [{ name: "Blueberry", hex: "#4b5bd1" }],
+      { "creatine-blueberry-blueberry-300-g": 25 },
+    ),
+    defaultVariantId: "creatine-blueberry-blueberry-300-g",
+    ingredients:
+      "Creatine monohydrate, flavouring, acidity regulator (citric acid), sweetener (sucralose), colour. Demo formulation, not a verified label.",
+    nutrition: nutrition("1 scoop (6 g)", [
+      ["Creatine monohydrate", "5 g"],
+      ["Energy", "0 kcal"],
+    ]),
+    directions:
+      "Mix one level scoop (6 g) into 200 ml of water or your shake once per day. Take it every day, including rest days.",
+    warnings: [
+      ...commonWarnings,
+      "If you have a medical condition or are taking medication, speak to a doctor before using creatine.",
+    ],
+    related: ["creatine", "pre-workout", "whey", "eaa"],
+    pack: {
+      kind: "tub",
+      body: "slate",
+      lines: ["CREATINE", "BLUEBERRY"],
+      descriptor: "Creatine monohydrate powder",
+      accent: "#4b5bd1",
+      flavorDriven: true,
+    },
+    keywords: ["creatine", "blueberry", "monohydrate", "flavoured", "deal", "daily deal"],
+    badges: ["Daily deal", "New"],
+    addedAt: "2026-10-20",
+    featuredRank: 4,
+    bestSellerRank: 5,
+  },
+  {
     id: "pre-workout",
     slug: "pre-workout",
     title: "Pre-Workout",
     shortTitle: "Pre-Workout",
     categoryId: "pre-workout",
+    goals: ["performance"],
     tagline: "A stimulant pre-workout in three loud flavours.",
     description: [
       "Pre-Workout is a caffeinated powder for the session you have been looking forward to all day. Three flavours, one 450 g tub, one formula.",
@@ -312,6 +369,7 @@ export const products: Product[] = [
     title: "BCAA Powder",
     shortTitle: "BCAA",
     categoryId: "amino-acids",
+    goals: ["muscle-gain", "performance"],
     tagline: "Branched-chain aminos for the bottle in your gym bag.",
     description: [
       "BCAA Powder is a branched-chain amino acid drink mix: leucine, isoleucine and valine in a fruit-forward flavour that goes into a bottle of water and stays there.",
@@ -364,6 +422,7 @@ export const products: Product[] = [
     title: "EAA Powder",
     shortTitle: "EAA",
     categoryId: "amino-acids",
+    goals: ["muscle-gain", "performance"],
     tagline: "All nine essential amino acids in one scoop.",
     description: [
       "EAA Powder contains all nine essential amino acids, which makes it a different product from our BCAA, not a re-labelled copy of it.",
@@ -417,6 +476,7 @@ export const products: Product[] = [
     title: "Mass Gainer",
     shortTitle: "Mass Gainer",
     categoryId: "mass-gainers",
+    goals: ["mass-gain"],
     tagline: "A calorie-dense shake for people who struggle to eat enough.",
     description: [
       "Mass Gainer blends protein with carbohydrate powder to build an easy, high-calorie shake. It comes in three bag sizes so you can try it before committing to six kilos.",
@@ -479,6 +539,7 @@ export const products: Product[] = [
     title: "Casein Protein",
     shortTitle: "Casein",
     categoryId: "protein",
+    goals: ["muscle-gain", "mass-gain"],
     tagline: "Slow-mixing casein for evenings and long gaps between meals.",
     description: [
       "Casein is the other milk protein. It digests more slowly than whey, which is why many people keep it for the evening or for long stretches without food.",
@@ -534,6 +595,7 @@ export const products: Product[] = [
     title: "Liquid L-Carnitine",
     shortTitle: "Liquid L-Carnitine",
     categoryId: "carnitine-energy",
+    goals: ["fat-burn", "performance"],
     tagline: "A one-litre bottle with a measured serving cap.",
     description: [
       "Liquid L-Carnitine is a ready-to-measure drink concentrate in a one-litre bottle. It is a different format from our L-Carnitine Tablets: you measure a serving rather than swallow a tablet.",
@@ -588,6 +650,7 @@ export const products: Product[] = [
     title: "Caffeine Tablets",
     shortTitle: "Caffeine",
     categoryId: "carnitine-energy",
+    goals: ["performance", "fat-burn"],
     tagline: "A measured dose of caffeine, no flavour, no sugar.",
     description: [
       "Caffeine Tablets give you a fixed amount of caffeine in a small tablet that you can keep in a gym bag. There is no taste, no sugar and no sweetener.",
@@ -636,6 +699,7 @@ export const products: Product[] = [
     title: "Omega-3",
     shortTitle: "Omega-3",
     categoryId: "daily-health",
+    goals: ["health"],
     tagline: "Fish oil softgels, taken with a meal.",
     description: [
       "Omega-3 is a fish oil softgel that contains EPA and DHA. Take it with food and keep it in the cupboard, not the gym bag.",
@@ -685,6 +749,7 @@ export const products: Product[] = [
     title: "Multivitamin",
     shortTitle: "Multivitamin",
     categoryId: "daily-health",
+    goals: ["health"],
     tagline: "One tablet a day, in a bone-white jar.",
     description: [
       "Multivitamin is a once-a-day tablet with a broad range of vitamins and minerals in this demo specification.",
@@ -732,6 +797,7 @@ export const products: Product[] = [
     title: "L-Carnitine Tablets",
     shortTitle: "L-Carnitine Tablets",
     categoryId: "carnitine-energy",
+    goals: ["fat-burn"],
     tagline: "The tablet format of L-carnitine, for people who do not want a bottle.",
     description: [
       "L-Carnitine Tablets are the tablet counterpart to our Liquid L-Carnitine. Same ingredient family, different format: a compact jar you can keep in a bag or desk drawer.",

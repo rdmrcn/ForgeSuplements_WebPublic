@@ -43,8 +43,10 @@ See `.env.example`. Placeholders only; there are no secrets.
 
 ## Features
 
-- 13 products with flavours/sizes, per-variant stock, ingredients, illustrative nutrition tables, directions, warnings and related products. No health claims, certifications or testimonials.
-- Shop with filters (category, flavour, size, availability, price), sort, URL-synced state, search with scoring, favourites, recently viewed.
+- 14 products with flavours/sizes, per-variant stock, ingredients, illustrative nutrition tables, directions, warnings and related products. No health claims, certifications or testimonials.
+- Shop by goal (Muscle Gain, Mass & Weight Gain, Fat Burn, Performance, Health). Goals are defined in `src/domain/catalog/goals.ts` and tagged per product via `goals`; picking one narrows the grid and offers product-type chips (e.g. Performance → Pre-Workout, Creatine, Amino Acids, Carnitine & Energy). Fat Burn and health copy avoids efficacy claims.
+- Daily deal on the homepage (`src/config/deals.ts`): the new Creatine Monohydrate Blueberry, 300 g, at a demo discount.
+- Shop with filters (goal, type, flavour, size, availability, price), sort, URL-synced state, search with scoring, favourites, recently viewed.
 - Cart drawer and page, stock-aware quantities (max 10 per line), discount codes (`FORGE10`, `WELCOME5`, `FREESHIP`), free-shipping meter.
 - Three-step checkout with country-specific address forms for TR, US, CA, DE, AT and GB (Türkiye province/district with partial-data fallback).
 - Illustrative, configurable shipping (`src/config/shipping.ts`).
@@ -70,9 +72,9 @@ Commands actually run on the final code:
 
 - `npx eslint .` — no errors
 - `npx tsc --noEmit` — passes
-- `npm run build` — succeeds (37 static pages)
-- `npx vitest run` — 36/36 pass
-- `npx playwright test` — 32/32 pass against the production build (desktop + mobile)
+- `npm run build` — succeeds (38 static pages)
+- `npx vitest run` — 42/42 pass
+- `npx playwright test` — 36/36 pass against the production build (desktop + mobile)
 
 A fresh dev-server load of home, product, cart drawer and checkout showed no console errors or warnings.
 

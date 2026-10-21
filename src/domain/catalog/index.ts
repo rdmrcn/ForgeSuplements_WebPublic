@@ -1,8 +1,9 @@
 import { categories, getCategory } from "./categories";
+import { getGoal, goals, isGoalId } from "./goals";
 import { products } from "./products";
-import type { CategoryId, Product, ResolvedLine, Variant } from "../types";
+import type { CategoryId, GoalId, Product, ResolvedLine, Variant } from "../types";
 
-export { categories, getCategory, products };
+export { categories, getCategory, getGoal, goals, isGoalId, products };
 
 const productById = new Map(products.map((p) => [p.id, p]));
 const productBySlug = new Map(products.map((p) => [p.slug, p]));
@@ -27,6 +28,10 @@ export function getVariant(variantId: string): { product: Product; variant: Vari
 
 export function getProductsByCategory(categoryId: CategoryId): Product[] {
   return products.filter((p) => p.categoryId === categoryId);
+}
+
+export function getProductsByGoal(goalId: GoalId): Product[] {
+  return products.filter((p) => p.goals.includes(goalId));
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {

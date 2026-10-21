@@ -1,10 +1,12 @@
 import { categoryName } from "./catalog/categories";
-import type { CategoryId, Product, Variant } from "./types";
+import { isGoalId } from "./catalog/goals";
+import type { CategoryId, GoalId, Product, Variant } from "./types";
 
 export type SortKey = "featured" | "price-asc" | "price-desc" | "newest";
 
 export interface BrowseFilters {
   q: string;
+  goals: GoalId[];
   categories: CategoryId[];
   flavors: string[];
   sizes: string[];
@@ -16,6 +18,7 @@ export interface BrowseFilters {
 
 export const defaultFilters: BrowseFilters = {
   q: "",
+  goals: [],
   categories: [],
   flavors: [],
   sizes: [],
@@ -96,6 +99,7 @@ export function filterProducts(products: Product[], filters: BrowseFilters): Pro
     .map((product) => ({ product, score: searchScore(product, filters.q) }))
     .filter(({ product, score }) => {
       if (score === 0) return false;
+      if (filters.goals.length > 0 && !filters.goals.some((g) => product.goals.includes(g))) return false;
       if (filters.categories.length > 0 && !filters.categories.includes(product.categoryId)) return false;
       return product.variants.some((v) => variantMatches(v, filters));
     });
@@ -143,6 +147,7 @@ export function parseFilters(params: URLSearchParams, lockedCategory?: CategoryI
   const sort = params.get("sort") as SortKey | null;
   return {
     q: (params.get("q") ?? "").slice(0, 80),
+    goals: list(params, "goal").filter(isGoalId),
     categories: lockedCategory ? [lockedCategory] : (list(params, "category") as CategoryId[]),
     flavors: list(params, "flavor"),
     sizes: list(params, "size"),
@@ -156,6 +161,7 @@ export function parseFilters(params: URLSearchParams, lockedCategory?: CategoryI
 export function serializeFilters(filters: BrowseFilters, lockedCategory?: CategoryId): URLSearchParams {
   const params = new URLSearchParams();
   if (filters.q.trim()) params.set("q", filters.q.trim());
+  if (filters.goals.length) params.set("goal", filters.goals.join("|"));
   if (!lockedCategory && filters.categories.length) params.set("category", filters.categories.join("|"));
   if (filters.flavors.length) params.set("flavor", filters.flavors.join("|"));
   if (filters.sizes.length) params.set("size", filters.sizes.join("|"));

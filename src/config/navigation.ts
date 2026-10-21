@@ -3,12 +3,19 @@ export const primaryNav = [
   { label: "Creatine", href: "/shop/creatine" },
   { label: "Pre-Workout", href: "/shop/pre-workout" },
   { label: "Amino Acids", href: "/shop/amino-acids" },
+  { label: "Daily deal", href: "/#daily-deal" },
   { label: "About", href: "/about" },
 ] as const;
 
 export const footerNav = {
   shop: [
     { label: "Shop all", href: "/shop" },
+    { label: "Muscle gain", href: "/shop?goal=muscle-gain" },
+    { label: "Mass & weight gain", href: "/shop?goal=mass-gain" },
+    { label: "Fat burn", href: "/shop?goal=fat-burn" },
+    { label: "Performance", href: "/shop?goal=performance" },
+    { label: "Health", href: "/shop?goal=health" },
+    { label: "Daily deal", href: "/#daily-deal" },
     { label: "Protein", href: "/shop/protein" },
     { label: "Creatine", href: "/shop/creatine" },
     { label: "Pre-Workout", href: "/shop/pre-workout" },

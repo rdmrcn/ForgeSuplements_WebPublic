@@ -9,6 +9,7 @@ interface Props {
   filters: BrowseFilters;
   onChange: (next: BrowseFilters) => void;
   lockedCategory?: CategoryId;
+  hideCategories?: boolean;
   flavors: string[];
   sizes: string[];
   priceBounds: [number, number];
@@ -36,7 +37,7 @@ function Check({ label, checked, onChange, swatch }: { label: string; checked: b
 
 const toggle = <T,>(list: T[], value: T, on: boolean): T[] => (on ? [...list, value] : list.filter((v) => v !== value));
 
-export function FilterPanel({ filters, onChange, lockedCategory, flavors, sizes, priceBounds }: Props) {
+export function FilterPanel({ filters, onChange, lockedCategory, hideCategories, flavors, sizes, priceBounds }: Props) {
   const minId = useId();
   const maxId = useId();
   const set = (patch: Partial<BrowseFilters>) => onChange({ ...filters, ...patch });
@@ -44,7 +45,7 @@ export function FilterPanel({ filters, onChange, lockedCategory, flavors, sizes,
 
   return (
     <div>
-      {!lockedCategory && (
+      {!lockedCategory && !hideCategories && (
         <Group title="Category">
           {categories.map((c) => (
             <Check key={c.id} label={c.name} checked={filters.categories.includes(c.id)} onChange={(on) => set({ categories: toggle(filters.categories, c.id, on) })} />

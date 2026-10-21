@@ -6,7 +6,7 @@ import { ProductBrowser } from "@/components/shop/product-browser";
 
 export const metadata: Metadata = {
   title: "Shop all",
-  description: "Browse the full FORGE demo range: protein, creatine, pre-workout, amino acids, mass gainers, carnitine and daily health.",
+  description: "Browse the full FORGE demo range by goal: muscle gain, mass gain, fat burn, performance and health.",
   alternates: { canonical: "/shop" },
 };
 
@@ -14,7 +14,7 @@ export default function ShopPage() {
   return (
     <>
       <Breadcrumbs items={[{ label: "Shop" }]} />
-      <PageHeader eyebrow="The full range" title="Shop all" description="Thirteen products, every one with its own formulation, pack and size options. Filter by category, flavour, size or price." />
+      <PageHeader eyebrow="The full range" title="Shop all" description="Pick a goal (muscle gain, mass gain, fat burn, performance or health), then narrow by product type, flavour, size or price." />
       <Suspense fallback={<BrowserSkeleton />}>
         <ProductBrowser />
       </Suspense>

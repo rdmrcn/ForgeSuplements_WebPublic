@@ -7,6 +7,8 @@ export type CategoryId =
   | "carnitine-energy"
   | "daily-health";
 
+export type GoalId = "mass-gain" | "muscle-gain" | "fat-burn" | "performance" | "health";
+
 export type PackKind = "tub" | "pouch" | "bottle" | "jar";
 
 export interface Category {
@@ -63,6 +65,8 @@ export interface Product {
   title: string;
   shortTitle: string;
   categoryId: CategoryId;
+  /** Training goals this product is shown under; a product can serve several. */
+  goals: GoalId[];
   tagline: string;
   description: string[];
   highlights: string[];

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { brand } from "@/config/brand";
-import { getProductById } from "@/domain/catalog";
+import { getProductById, products } from "@/domain/catalog";
 import { LinkButton } from "@/components/ui/button";
 import { PackShot } from "@/components/product/pack-shot";
 
@@ -45,7 +45,7 @@ export function Hero() {
           <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-bone/20 pt-5 text-sm" data-reveal style={{ ["--i" as string]: 4 }}>
             <div>
               <dt className="eyebrow text-bone/55">Range</dt>
-              <dd className="display mt-1 text-3xl">13 products</dd>
+              <dd className="display mt-1 text-3xl">{products.length} products</dd>
             </div>
             <div>
               <dt className="eyebrow text-bone/55">Ships to</dt>

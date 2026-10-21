@@ -21,6 +21,7 @@ import { ProductCard } from "@/components/product/product-card";
 import { Button, LinkButton } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
 import { FilterPanel } from "./filter-panel";
+import { GoalBar } from "./goal-bar";
 
 interface Props {
   lockedCategory?: CategoryId;
@@ -46,16 +47,28 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
     }
   }
 
+  const showGoals = !lockedCategory && !showSearch;
   const scope = useMemo(
     () => (lockedCategory ? allProducts.filter((p) => p.categoryId === lockedCategory) : allProducts),
     [lockedCategory],
+  );
+  const goalScope = useMemo(
+    () => (filters.goals.length ? scope.filter((p) => filters.goals.some((g) => p.goals.includes(g))) : scope),
+    [scope, filters.goals],
+  );
+  const typeOptions = useMemo(
+    () =>
+      categories
+        .map((c) => ({ id: c.id, name: c.name, count: goalScope.filter((p) => p.categoryId === c.id).length }))
+        .filter((c) => c.count > 0),
+    [goalScope],
   );
   const facets = useMemo(() => {
     const flavors = new Set<string>();
     const sizes = new Set<string>();
     let min = Infinity;
     let max = 0;
-    for (const p of scope) {
+    for (const p of goalScope) {
       for (const v of p.variants) {
         if (v.flavor) flavors.add(v.flavor);
         sizes.add(v.size);
@@ -64,7 +77,7 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
       }
     }
     return { flavors: [...flavors], sizes: [...sizes], bounds: [min, max] as [number, number] };
-  }, [scope]);
+  }, [goalScope]);
 
   const results = useMemo(() => filterProducts(scope, filters), [scope, filters]);
   const active = countActiveFilters(filters, lockedCategory);
@@ -76,10 +89,10 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
     window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
   }
 
-  const reset = () => update({ ...defaultFilters, q: filters.q, sort: filters.sort });
+  const reset = () => update({ ...defaultFilters, q: filters.q, sort: filters.sort, goals: filters.goals });
 
   const chips: { key: string; label: string; remove: () => void }[] = [
-    ...(lockedCategory ? [] : filters.categories.map((c) => ({ key: `c-${c}`, label: categories.find((x) => x.id === c)?.name ?? c, remove: () => update({ ...filters, categories: filters.categories.filter((x) => x !== c) }) }))),
+    ...(showGoals ? [] : lockedCategory ? [] : filters.categories.map((c) => ({ key: `c-${c}`, label: categories.find((x) => x.id === c)?.name ?? c, remove: () => update({ ...filters, categories: filters.categories.filter((x) => x !== c) }) }))),
     ...filters.flavors.map((f) => ({ key: `f-${f}`, label: f, remove: () => update({ ...filters, flavors: filters.flavors.filter((x) => x !== f) }) })),
     ...filters.sizes.map((s) => ({ key: `s-${s}`, label: s, remove: () => update({ ...filters, sizes: filters.sizes.filter((x) => x !== s) }) })),
     ...(filters.minCents !== undefined ? [{ key: "min", label: `From ${formatMoney(filters.minCents)}`, remove: () => update({ ...filters, minCents: undefined }) }] : []),
@@ -88,7 +101,7 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
   ];
 
   const panel = (
-    <FilterPanel filters={filters} onChange={update} lockedCategory={lockedCategory} flavors={facets.flavors} sizes={facets.sizes} priceBounds={facets.bounds} />
+    <FilterPanel filters={filters} onChange={update} lockedCategory={lockedCategory} hideCategories={showGoals} flavors={facets.flavors} sizes={facets.sizes} priceBounds={facets.bounds} />
   );
 
   return (
@@ -107,6 +120,8 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
           />
         </form>
       )}
+
+      {showGoals && <GoalBar filters={filters} onChange={update} typeOptions={typeOptions} />}
 
       <div className="sticky top-[var(--header-h)] z-20 -mx-[clamp(1rem,3.2vw,3rem)] flex items-center justify-between gap-3 border-b border-line bg-bone/95 px-[clamp(1rem,3.2vw,3rem)] py-3 backdrop-blur">
         <div className="flex items-center gap-3">

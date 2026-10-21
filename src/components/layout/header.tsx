@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { primaryNav } from "@/config/navigation";
-import { categories, getProductsByCategory } from "@/domain/catalog";
+import { categories, getProductsByCategory, goals } from "@/domain/catalog";
 import { PackShot } from "@/components/product/pack-shot";
 import { Logo } from "@/components/ui/logo";
 import { HeaderActions } from "./header-actions";
@@ -24,6 +24,14 @@ export function Header() {
               Shop
             </Link>
             <div className="invisible absolute inset-x-0 top-full -translate-y-1 border-b border-line bg-bone opacity-0 shadow-[var(--shadow-soft)] transition-[opacity,transform,visibility] duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="container-x flex flex-wrap items-center gap-2 border-b border-line pt-5 pb-4">
+                <span className="eyebrow mr-2 text-stone">Shop by goal</span>
+                {goals.map((g) => (
+                  <Link key={g.id} href={`/shop?goal=${g.id}`} className="border border-line-strong px-3 py-1.5 text-sm font-medium hover:border-ink hover:bg-ink hover:text-bone">
+                    {g.name}
+                  </Link>
+                ))}
+              </div>
               <div className="container-x grid grid-cols-7 gap-3 py-6">
                 {categories.map((c) => {
                   const product = getProductsByCategory(c.id)[0];

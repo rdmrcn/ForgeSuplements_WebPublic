@@ -5,6 +5,7 @@ const slugs = [
   "standard-whey-protein",
   "whey-protein-isolate",
   "creatine-monohydrate",
+  "creatine-blueberry",
   "pre-workout",
   "bcaa",
   "eaa",
@@ -57,6 +58,41 @@ test.describe("browsing", () => {
     await page.getByTestId("reset-filters").click();
     await expect(page.getByTestId("result-count")).toContainText("3 products");
     await expect(page).toHaveURL(/q=cocoa/);
+  });
+
+  test("shop by goal lists matching products and narrows by type", async ({ page }) => {
+    await page.goto("/shop");
+    await page.getByTestId("goal-performance").click();
+    await expect(page).toHaveURL(/goal=performance/);
+    const grid = page.getByTestId("product-grid");
+    await expect(grid).toContainText("Pre-Workout");
+    await expect(grid).toContainText("Creatine Monohydrate Blueberry");
+    await expect(grid).not.toContainText("Omega-3");
+
+    await page.getByTestId("type-pre-workout").click();
+    await expect(page.getByTestId("product-card")).toHaveCount(1);
+    await expect(page.getByTestId("product-card")).toContainText("Pre-Workout");
+
+    await page.getByTestId("goal-health").click();
+    await expect(page.getByTestId("product-card")).toHaveCount(2);
+    await page.getByTestId("goal-all").click();
+    await expect(page.getByTestId("product-card")).toHaveCount(14);
+  });
+
+  test("goal links from the URL are honoured", async ({ page }) => {
+    await page.goto("/shop?goal=fat-burn");
+    await expect(page.getByTestId("goal-fat-burn")).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByTestId("goal-detail")).toContainText("No supplement burns fat by itself");
+  });
+
+  test("daily deal on the homepage adds the blueberry creatine to the cart", async ({ page }) => {
+    await page.goto("/");
+    const deal = page.getByTestId("daily-deal");
+    await expect(deal).toContainText("Blueberry");
+    await expect(deal.getByTestId("deal-price")).toContainText("€15.90");
+    await deal.getByTestId("add-to-cart").click();
+    await page.goto("/cart");
+    await expect(page.getByRole("main")).toContainText("Creatine Monohydrate Blueberry");
   });
 
   test("category page shows only its products and sorts by price", async ({ page }) => {

@@ -3,7 +3,7 @@
 import { ChevronRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { categories } from "@/domain/catalog";
+import { categories, goals } from "@/domain/catalog";
 import { Drawer } from "@/components/ui/drawer";
 import { Logo } from "@/components/ui/logo";
 
@@ -34,6 +34,16 @@ export function MobileMenu() {
           <Link href="/shop" onClick={close} className={`${row} display text-3xl`}>
             Shop all <ChevronRight className="size-5" aria-hidden />
           </Link>
+          <p className="eyebrow pt-5 text-stone">Shop by goal</p>
+          {goals.map((g) => (
+            <Link key={g.id} href={`/shop?goal=${g.id}`} onClick={close} className={`${row} text-lg font-medium`}>
+              {g.name} <ChevronRight className="size-4 text-stone" aria-hidden />
+            </Link>
+          ))}
+          <Link href="/#daily-deal" onClick={close} className={`${row} text-lg font-medium text-ember`}>
+            Daily deal <ChevronRight className="size-4" aria-hidden />
+          </Link>
+          <p className="eyebrow pt-5 text-stone">Shop by type</p>
           {categories.map((c) => (
             <Link key={c.id} href={`/shop/${c.slug}`} onClick={close} className={`${row} text-lg font-medium`}>
               {c.name} <ChevronRight className="size-4 text-stone" aria-hidden />

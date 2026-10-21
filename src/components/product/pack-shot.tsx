@@ -250,7 +250,7 @@ export function PackShot({ product, variant, className, bare }: Props) {
       viewBox="0 0 400 500"
       className={className}
       role="img"
-      aria-label={`${product.title}${flavor ? `, ${flavor}` : ""}, ${v.size} pack. Illustrative original packaging render.`}
+      aria-label={`${product.title}${flavor && !product.title.includes(flavor) ? `, ${flavor}` : ""}, ${v.size} pack. Illustrative original packaging render.`}
       preserveAspectRatio="xMidYMid meet"
     >
       {defs}

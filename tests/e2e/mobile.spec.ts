@@ -23,14 +23,16 @@ test("mobile homepage, menu and layouts do not overflow", async ({ page }) => {
 
 test("mobile shopping flow: filters, product, cart drawer, checkout", async ({ page }) => {
   await page.goto("/shop");
+  await page.getByTestId("goal-performance").click();
+  await expect(page.getByTestId("product-card")).toHaveCount(7);
   await page.getByRole("button", { name: /Filters/ }).click();
   const filters = page.getByRole("dialog", { name: "Filters" });
-  await filters.getByLabel("Creatine").check();
+  await filters.getByLabel("Blueberry").check();
   await filters.getByRole("button", { name: /Show 1/ }).click();
   await expect(page.getByTestId("product-card")).toHaveCount(1);
   await noHorizontalOverflow(page);
 
-  await page.getByTestId("product-card").getByRole("link", { name: /Creatine Monohydrate/ }).first().click();
+  await page.getByTestId("product-card").getByRole("link", { name: /Creatine Monohydrate Blueberry/ }).first().click();
   await expect(page.getByTestId("product-title")).toBeVisible();
   await noHorizontalOverflow(page);
   await page.getByTestId("add-to-cart").first().click();
