@@ -15,7 +15,7 @@ import type { DemoOrder, OrderRepository } from "./types";
 const memory = new Map<string, DemoOrder>();
 
 function storePath(): string {
-  return path.resolve(process.env.ORDER_STORE_PATH ?? path.join(process.cwd(), ".data", "orders.json"));
+  return path.resolve(/*turbopackIgnore: true*/ process.env.ORDER_STORE_PATH ?? path.join(/*turbopackIgnore: true*/ process.cwd(), ".data", "orders.json"));
 }
 
 async function readAll(): Promise<Record<string, DemoOrder>> {

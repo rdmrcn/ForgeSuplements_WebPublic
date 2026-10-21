@@ -32,7 +32,7 @@ export async function createDemoOrder(payload: unknown): Promise<CreateOrderResu
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
     for (const issue of parsed.error.issues) {
-      const key = issue.path.join(".");
+      const key = issue.path.join(".").replace(/^checkout\./, "");
       if (!fieldErrors[key]) fieldErrors[key] = issue.message;
     }
     return {

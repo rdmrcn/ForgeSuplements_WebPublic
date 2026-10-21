@@ -2,8 +2,8 @@
 
 import { SlidersHorizontal, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState, useTransition } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import { categories, products as allProducts } from "@/domain/catalog";
 import {
   countActiveFilters,
@@ -28,13 +28,23 @@ interface Props {
 }
 
 export function ProductBrowser({ lockedCategory, showSearch }: Props) {
-  const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const [, startTransition] = useTransition();
+  const urlKey = params.toString();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const filters = useMemo(() => parseFilters(new URLSearchParams(params.toString()), lockedCategory), [params, lockedCategory]);
+  // Local state is the source of truth so controls respond instantly; the URL mirrors it
+  // (shareable links) and external navigation, such as a new header search, flows back in.
+  const [filters, setFilters] = useState<BrowseFilters>(() => parseFilters(new URLSearchParams(urlKey), lockedCategory));
+  const [seenKey, setSeenKey] = useState(urlKey);
+  const [pushedKey, setPushedKey] = useState(urlKey);
+  if (urlKey !== seenKey) {
+    setSeenKey(urlKey);
+    if (urlKey !== pushedKey) {
+      setPushedKey(urlKey);
+      setFilters(parseFilters(new URLSearchParams(urlKey), lockedCategory));
+    }
+  }
 
   const scope = useMemo(
     () => (lockedCategory ? allProducts.filter((p) => p.categoryId === lockedCategory) : allProducts),
@@ -61,7 +71,9 @@ export function ProductBrowser({ lockedCategory, showSearch }: Props) {
 
   function update(next: BrowseFilters) {
     const qs = serializeFilters(next, lockedCategory).toString();
-    startTransition(() => router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false }));
+    setFilters(next);
+    setPushedKey(qs);
+    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
   }
 
   const reset = () => update({ ...defaultFilters, q: filters.q, sort: filters.sort });

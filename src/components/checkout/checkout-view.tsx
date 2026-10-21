@@ -62,7 +62,6 @@ export function CheckoutView() {
       phone: "",
       shipping: emptyAddress(destinationCountry),
       billingSame: true,
-      billing: emptyAddress(destinationCountry),
       shippingMethodId: destinationMethod,
       acceptDemoTerms: false,
     },
@@ -81,7 +80,6 @@ export function CheckoutView() {
     if (hydrated && !initialised.current) {
       initialised.current = true;
       setValue("shipping.country", destinationCountry);
-      setValue("billing.country", destinationCountry);
       setValue("shippingMethodId", destinationMethod);
     }
   }, [hydrated, destinationCountry, destinationMethod, setValue]);
@@ -206,7 +204,6 @@ export function CheckoutView() {
                   errors={errors}
                   onCountryChange={(c) => {
                     setDestinationCountry(c);
-                    if (getValues("billingSame")) setValue("billing.country", c);
                   }}
                 />
                 <ul className="mt-4 space-y-1 text-xs text-stone">
@@ -216,7 +213,12 @@ export function CheckoutView() {
                 </ul>
               </Section>
               <Section title="Billing address">
-                <CheckboxField label="Billing address is the same as the delivery address" {...register("billingSame")} />
+                <CheckboxField
+                  label="Billing address is the same as the delivery address"
+                  {...register("billingSame", {
+                    onChange: (e) => setValue("billing", e.target.checked ? undefined : emptyAddress(getValues("shipping.country"))),
+                  })}
+                />
                 {!billingSame && (
                   <div className="mt-5">
                     <AddressFields prefix="billing" register={register} watch={watch} setValue={setValue} errors={errors} />
