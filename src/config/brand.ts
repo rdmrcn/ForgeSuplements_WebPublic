@@ -7,7 +7,7 @@
  */
 export const brand = {
   name: "FORGE",
-  legalName: "FORGE Nutrition (demo)",
+  owner: "Reha Demircan",,
   slogan: "Built for the work.",
   tagline: "Sports nutrition for people who train on purpose.",
   description:
