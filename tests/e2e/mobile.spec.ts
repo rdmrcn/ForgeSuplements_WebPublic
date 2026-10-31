@@ -44,3 +44,18 @@ test("mobile shopping flow: filters, product, cart drawer, checkout", async ({ p
   await expect(page.getByTestId("checkout-form")).toBeVisible();
   await noHorizontalOverflow(page);
 });
+
+test("mobile help desk fits the screen and answers", async ({ page }) => {
+  await page.goto("/");
+  await page.getByTestId("helpdesk-launcher").click();
+  const panel = page.getByTestId("helpdesk-panel");
+  await expect(panel).toBeVisible();
+  const box = await panel.boundingBox();
+  const viewport = page.viewportSize()!;
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(viewport.width);
+  await page.getByTestId("helpdesk-input").fill("Teslimat kaç gün sürer?");
+  await page.getByTestId("helpdesk-send").click();
+  await expect(page.getByTestId("helpdesk-message").last()).toContainText("iş günü");
+  await noHorizontalOverflow(page);
+});

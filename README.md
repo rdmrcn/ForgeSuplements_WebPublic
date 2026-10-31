@@ -39,6 +39,7 @@ See `.env.example`. Placeholders only; there are no secrets.
 
 - `NEXT_PUBLIC_SITE_URL` — canonical origin for metadata, sitemap and JSON-LD.
 - `PAYMENT_PROVIDER` — only `demo` is implemented; any other value throws.
+- `ASSISTANT_LLM_API_KEY` (optional) — enables AI phrasing in the help desk; see Features.
 - `ORDER_STORE_PATH` — demo order file (default `.data/orders.json`, git-ignored; memory fallback if unwritable).
 
 ## Features
@@ -52,6 +53,8 @@ See `.env.example`. Placeholders only; there are no secrets.
 - Illustrative, configurable shipping (`src/config/shipping.ts`).
 - Original SVG packaging renders generated from catalog data, generated campaign imagery, reduced-motion support, skip link, native `<dialog>` drawers.
 - SEO: metadata, sitemap, robots, Product JSON-LD (only fields that exist).
+- **Help desk assistant** (floating "Help" button on every page, English and Turkish): estimates when a demo order would arrive from its order number plus checkout email (business days, weekends skipped, and honest that demo orders never ship), lists the shipping countries with times and rates, answers delivery time and shipping cost per country, recommends products by goal and explains what each supplement is commonly used for, and covers discount codes, payments, returns and stock. Answers come from the store's own data with no health claims; medical questions are redirected to a doctor. Code: `src/server/assistant/`, endpoint `POST /api/assistant` (validated, 12 messages / 600 characters, 20 requests per minute per IP).
+  - Optional AI phrasing: set `ASSISTANT_LLM_API_KEY` (plus optionally `ASSISTANT_LLM_BASE_URL` and `ASSISTANT_LLM_MODEL`) to let any OpenAI-compatible model rewrite the answer from the same facts. If it is unset or the call fails, the built-in engine answers. Replies are labelled with their source.
 - Policy pages, contact form (demo, nothing sent), 404/error/loading states, demo order confirmation page.
 
 ## How demo checkout works
@@ -85,8 +88,8 @@ Commands actually run on the final code:
 - `npx eslint .` — no errors
 - `npx tsc --noEmit` — passes
 - `npm run build` — succeeds (38 static pages)
-- `npx vitest run` — 42/42 pass
-- `npx playwright test` — 36/36 pass against the production build (desktop + mobile)
+- `npx vitest run` — 68/68 pass
+- `npx playwright test` — 43/43 pass against the production build (desktop + mobile)
 
 A fresh dev-server load of home, product, cart drawer and checkout showed no console errors or warnings.
 
@@ -98,5 +101,6 @@ A fresh dev-server load of home, product, cart drawer and checkout showed no con
 - `/order/<unknown-id>` renders the not-found UI but responds with HTTP 200 (streamed).
 - Cart drawer and cart page content both live in the DOM.
 - Big Shoulders font fallback-metrics warning appears at build time.
+- The AI phrasing path was tested only against a local mock server; it has not been run against a real model provider. The built-in assistant is rule-based (keyword intents), not a trained model, so unusual phrasings fall back to a suggestions menu.
 - Accessibility was built in (labels, focus handling, contrast tokens) but not audited with an external tool.
 - No deployment was made.

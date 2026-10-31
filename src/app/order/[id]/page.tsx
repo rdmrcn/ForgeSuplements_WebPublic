@@ -5,6 +5,7 @@ import { describeEta } from "@/domain/shipping";
 import { getVariant } from "@/domain/catalog";
 import { formatMoney } from "@/lib/format";
 import { PackShot } from "@/components/product/pack-shot";
+import { HelpDeskLink } from "@/components/help/help-desk";
 import { LinkButton } from "@/components/ui/button";
 import { getOrderRepository } from "@/server/orders";
 
@@ -89,6 +90,7 @@ export default async function OrderPage({ params }: PageProps<"/order/[id]">) {
             <p className="mt-1">Nothing. This is a portfolio demo, so there is no fulfilment, payment or tracking. In a live store this is where the payment provider would confirm payment and a confirmation email would be sent.</p>
           </div>
           <LinkButton href="/shop" variant="primary">Keep browsing</LinkButton>
+          <HelpDeskLink prompt={`When would my order ${order.id} arrive?`} className="inline-flex h-12 items-center border border-line-strong px-6 text-[0.8125rem] font-semibold uppercase tracking-[0.1em] hover:border-ink hover:bg-ink hover:text-bone">Ask about delivery</HelpDeskLink>
         </aside>
       </div>
     </div>

@@ -118,6 +118,7 @@ export const policies: Policy[] = [
         <ul>
           <li><strong>In your browser (localStorage):</strong> your cart, shipping destination, favourites and recently viewed products. This stays on your device and is not sent anywhere until you place a demo order.</li>
           <li><strong>On the local server:</strong> when you place a demo order, the details you enter (name, email, phone, address, items) are written to a JSON file on the machine running the app. That file is a development convenience, not a secure production database.</li>
+          <li><strong>Help desk assistant:</strong> messages you type are sent to this site&apos;s server to be answered from store data and are not stored. If the site owner configures an external AI model, the question, the recent conversation and (only after you supply a matching order number and email) that order&apos;s details are sent to that provider to phrase the reply. The default setup sends nothing to third parties.</li>
           <li><strong>Newsletter and contact forms:</strong> validated in the browser only. Nothing is stored or sent.</li>
         </ul>
         <h2>What it does not do</h2>

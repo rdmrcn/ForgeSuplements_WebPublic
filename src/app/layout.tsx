@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { brand } from "@/config/brand";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { HelpDesk } from "@/components/help/help-desk";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { StoreHydrator } from "@/components/layout/store-hydrator";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <CartDrawer />
+        <HelpDesk />
         <Toaster />
       </body>
     </html>

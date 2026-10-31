@@ -28,7 +28,6 @@ export const footerNav = {
     { label: "Contact and support", href: "/contact" },
     { label: "Shipping and delivery", href: "/policies/shipping" },
     { label: "Returns and refunds", href: "/policies/returns" },
-    { label: "Track a demo order", href: "/contact#orders" },
   ],
   company: [
     { label: "About FORGE", href: "/about" },

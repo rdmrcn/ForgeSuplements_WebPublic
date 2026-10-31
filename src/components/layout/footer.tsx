@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { brand } from "@/config/brand";
 import { footerNav } from "@/config/navigation";
+import { HelpDeskLink } from "@/components/help/help-desk";
 import { NewsletterForm } from "@/components/home/newsletter-form";
 import { Logo } from "@/components/ui/logo";
 
-function Column({ title, links }: { title: string; links: readonly { label: string; href: string }[] }) {
+function Column({ title, links, extra }: { title: string; links: readonly { label: string; href: string }[]; extra?: React.ReactNode }) {
   return (
     <nav aria-label={title}>
       <h2 className="eyebrow mb-4 text-bone/55">{title}</h2>
@@ -16,6 +17,7 @@ function Column({ title, links }: { title: string; links: readonly { label: stri
             </Link>
           </li>
         ))}
+        {extra && <li>{extra}</li>}
       </ul>
     </nav>
   );
@@ -56,7 +58,11 @@ export function Footer() {
             </address>
           </div>
           <Column title="Shop" links={footerNav.shop} />
-          <Column title="Help" links={footerNav.help} />
+          <Column
+            title="Help"
+            links={footerNav.help}
+            extra={<HelpDeskLink className="link-underline text-left text-ember hover:text-bone">Ask the help desk</HelpDeskLink>}
+          />
           <Column title="Company" links={footerNav.company} />
           <Column title="Legal" links={footerNav.legal} />
         </div>

@@ -4,6 +4,7 @@ import { brand } from "@/config/brand";
 import { Breadcrumbs, PageHeader } from "@/components/layout/page-header";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Accordion } from "@/components/ui/accordion";
+import { HelpDeskLink } from "@/components/help/help-desk";
 
 export const metadata: Metadata = {
   title: "Contact and support",
@@ -40,6 +41,12 @@ export default function ContactPage() {
           <div id="orders" className="mt-10 scroll-mt-28">
             <h2 className="display text-3xl">Demo orders</h2>
             <p className="mt-2 text-ink/75">Demo orders are not shipped and cannot be tracked. After checkout you see a confirmation page with your demo order number; keep the link if you want to revisit it.</p>
+            <p className="mt-3 text-ink/75">
+              Want to know when a demo order <em>would</em> arrive? The help desk assistant can work out the delivery window from your order number and checkout email.
+            </p>
+            <HelpDeskLink prompt="Where is my order?" className="mt-4 inline-flex h-12 items-center border border-ink bg-ink px-6 text-[0.8125rem] font-semibold uppercase tracking-[0.1em] text-bone hover:border-ember hover:bg-ember hover:text-ink">
+              Ask the help desk
+            </HelpDeskLink>
           </div>
 
           <div className="mt-10 border-t border-line">
