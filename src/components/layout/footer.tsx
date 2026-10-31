@@ -73,7 +73,13 @@ export function Footer() {
             nutrition values, prices, shipping rates and delivery times are illustrative; nothing here is verified label data or a health claim.
             No payments are taken and no orders are shipped. Food supplements are not a substitute for a varied diet.
           </p>
-          <p className="mt-3">&copy; {new Date().getFullYear()} {brand.legalName}. Portfolio project.</p>
+          <p className="mt-3 text-bone/70">
+  &copy; {new Date().getFullYear()} {brand.name} by {brand.owner}. All rights reserved.
+</p>
+<p className="mt-1">
+  Designed, built and owned by {brand.owner}. The {brand.name} name, design and source code may not be copied or reused without
+  written permission. Portfolio project.
+</p>
         </div>
       </div>
       <div aria-hidden className="display pointer-events-none relative z-0 -mb-[3.2vw] select-none text-center text-[22vw] leading-[0.8] text-bone/[0.04]">
